@@ -2,7 +2,7 @@
 Using docker, airflow postgresql and sklearn for this project to forecast palm oil spot price for 3 months 
 
 Steps To Run and View Results on Airflow:
-This is tested successfuly on linux ubuntu os.
+(Note This is tested successfuly on linux ubuntu os)
 1. In terminal, change the active directory to the folder that contains the docker-compose.yml
 
 2. In terminal, run 'docker-compose build'
