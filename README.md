@@ -7,3 +7,4 @@ steps:
 3. Run 'docker-compose up'
 4. To view airflow webui, open your browser to localhost:8080
 5. You can trigger the task manually to view the results.
+6. To view the results, click on the task dagid > Graph view > [get_forecast] > task instance details > Xcom
