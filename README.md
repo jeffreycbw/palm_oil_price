@@ -1,5 +1,5 @@
 # palm oil spot
-Using docker, airflow and sklearn for this project to forecast palm oil spot price for 3 months 
+Using docker, airflow postgresql and sklearn for this project to forecast palm oil spot price for 3 months 
 
 steps:
 1. Change the active directory to the folder
