@@ -1,0 +1,88 @@
+version: '3'
+services:
+
+    redis:
+        image: 'redis:5.0.5'
+        command: redis-server --requirepass redispass
+        
+    postgres:
+        image: postgres:9.6.14
+        volumes:
+            - './csv_data:/var/lib/postgresql/csv/'
+            - './db_scripts:/docker-entrypoint-initdb.d'
+
+        container_name: "postgres"
+        environment:
+            - POSTGRES_USERNAME=postgres
+            - POSTGRES_PASSWORD=newpassword
+            - POSTGRES_DB=kenanga_db
+        ports:
+            - '5432:5432'
+    
+    webserver:
+        build: .
+        restart: always
+        depends_on:
+            - 'postgres'
+        volumes:
+            - './dags:/usr/local/airflow/dags'
+            - './airflow.cfg:/usr/local/airflow/airflow.cfg'
+        environment:
+            - POSTGRES_USERNAME=postgres
+            - POSTGRES_PASSWORD=newpassword
+            - POSTGRES_DB=kenanga_db
+        ports:
+            - '8080:8080'
+        command:
+            - webserver
+    
+    flower:
+        build: .
+        restart: always
+        depends_on:
+            - 'redis'
+        volumes:
+            - './airflow.cfg:/usr/local/airflow/airflow.cfg'
+        environment:
+            - EXECUTOR=Celery
+            - REDIS_PASSWORD=redispass
+        ports:
+            - "5555:5555"
+        command: flower
+
+    scheduler:
+        build: .
+        restart: always
+        depends_on:
+            - 'webserver'
+        volumes:
+            - './dags:/usr/local/airflow/dags'
+            - './airflow.cfg:/usr/local/airflow/airflow.cfg'
+
+        environment:
+            - LOAD_EX=y
+            - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+            - EXECUTOR=Celery
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=newpassword
+            - POSTGRES_DB=kenanga_db
+            - REDIS_PASSWORD=redispass
+        command: scheduler
+       
+    worker:
+        build: .
+        restart: always
+        depends_on:
+            - 'scheduler'
+        volumes:
+            - './dags:/usr/local/airflow/dags'
+            - './airflow.cfg:/usr/local/airflow/airflow.cfg'
+
+        environment:
+            - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+            - EXECUTOR=Celery
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=newpassword
+            - POSTGRES_DB=kenanga_db
+            - REDIS_PASSWORD=redispass
+        command: worker
