@@ -2,11 +2,12 @@
 Using docker, airflow postgresql and sklearn for this project to forecast palm oil spot price for 3 months 
 
 Steps To Run and View Results on Airflow:
-1. In docker toolbox/terminal, change the active directory to the folder that contains the docker-compose.yml
+This is tested successfuly on linux ubuntu os.
+1. In terminal, change the active directory to the folder that contains the docker-compose.yml
 
-2. In docker toolbox/terminal, run 'docker-compose build'
+2. In terminal, run 'docker-compose build'
 
-3. In docker toolbox/terminal, run 'docker-compose up'
+3. In terminal, run 'docker-compose up'
 
 4. To view airflow webui, open your browser to localhost:8080
 ![image](https://user-images.githubusercontent.com/36352341/80977932-ff046b00-8e57-11ea-9b7e-a41c00e6688a.png)
